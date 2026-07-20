@@ -1,0 +1,29 @@
+# Google Drive 系統檔
+desktop.ini
+Thumbs.db
+.DS_Store
+*.tmp
+~$*
+
+# 敏感資料
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+credentials.*
+service-account*.json
+token*.json
+
+# 常見本機工具產物
+node_modules/
+.venv/
+__pycache__/
+dist/
+build/
+coverage/
+
+# Agent 本機設定
+.codex/
+.claude/
