@@ -6,7 +6,7 @@
 
 - 專案入口：`C:\Users\chang\我的雲端硬碟\agents\ai-agent-external-tools`
 - Obsidian 駕駛艙：`C:\Users\chang\我的雲端硬碟\2ndbrain\ai-agent-external-tools-專案駕駛艙.md`
-- GitHub：建立遠端後補上實際網址；預設推送目標為 `origin/main`。
+- GitHub：`https://github.com/changyiwu/ai-agent-external-tools`；預設推送目標為 `origin/main`。
 - Firebase：本專案目前不使用 Firebase，也不在初始化流程中部署或修改安全規則。
 - 工作流程：說「開工」時讀取本檔、駕駛艙與 Git 狀態；說「收工」時先驗證、更新駕駛艙，再依明確授權 commit／push。
 - 同步邊界：不要提交 `.env`、憑證、token、`.codex/`、`.claude/` 或其他代理程式本機設定。
