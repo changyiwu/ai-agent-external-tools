@@ -3,7 +3,7 @@
 > 出處：三師爸 Sense Bar《AI Agent 基本功 — 連接外部工具》（影片：https://youtu.be/-kIzGOf0bZA）
 > 適用對象：任何 AI Agent，特別針對 Claude Code、ChatGPT 桌面版／Codex、Antigravity 2、OpenCode 校準。
 > 使用方式：使用者說「讀這份檔案，幫我把 ○○ 接起來」後，依本指南完成訪談、選路、授權、驗收與記錄。
-> 最後查證：2026-07-20。產品入口變動很快，實際操作前仍須確認官方文件。
+> 最後查證：2026-08-01。產品入口變動很快，實際操作前仍須確認官方文件。
 
 ---
 
@@ -71,15 +71,15 @@
 
 ## 第三步：各 Agent 的目前入口
 
-### 總覽（2026-07-20）
+### 總覽（2026-08-01）
 
 | 介面 | 優先入口 | 手動 MCP | 驗證方式 |
 |------|----------|----------|----------|
 | **Claude Code** | Anthropic Directory／claude.ai Connectors | `claude mcp add`、`.mcp.json`、`~/.claude.json` | `claude mcp list`、會話內 `/mcp` |
-| **ChatGPT 桌面版／Codex** | Plugins；`Settings → MCP servers` | `codex mcp add`、`~/.codex/config.toml`、專案 `.codex/config.toml` | `/mcp`、`codex mcp list` |
+| **ChatGPT 桌面版（Work／Codex）／Codex CLI** | Plugins（Work／Codex）；Codex host 的 `Settings → MCP servers` | `codex mcp add`、`~/.codex/config.toml`、專案 `.codex/config.toml` | `/mcp`、`codex mcp list` |
 | **ChatGPT 網頁版** | Work mode 的 **Plugins** | 使用 Plugin 內含的 Connector／Remote MCP；不讀本機 Codex 設定 | Plugins 頁與新對話中的可用工具 |
 | **Antigravity 2** | `Settings → Customizations → Installed MCP Servers` | 全域 `~/.gemini/config/mcp_config.json`；專案 `.agents/mcp_config.json` | 已安裝清單、Refresh、CLI `/mcp` |
-| **OpenCode** | 無內建目錄，直接設定 | 專案 `opencode.json`；全域 `~/.config/opencode/opencode.json` | `opencode mcp list`、實際呼叫工具 |
+| **OpenCode V1（穩定版）** | 無內建目錄，直接設定 | 專案 `opencode.json`；全域 `~/.config/opencode/opencode.json` | `opencode mcp list`、實際呼叫工具 |
 
 > 加入或修改工具後，依產品提示執行 Reload、Restart、Restart extension 或開新對話。不要把「所有 Agent 都一定要完全重啟」當成通則。
 
@@ -112,7 +112,7 @@ claude mcp add --transport stdio <名稱> -- cmd /c npx -y <MCP套件名>
 
 ### ChatGPT 桌面版／Codex／網頁版
 
-#### ChatGPT 桌面版與 Codex
+#### ChatGPT 桌面版的 Codex 與其他本機 Codex client
 
 1. 開啟 `Settings → MCP servers`。
 2. 選擇 **Add server**。
@@ -137,6 +137,8 @@ args = ["-y", "<MCP套件名>"]
 
 - ChatGPT 桌面版、Codex CLI 與 IDE extension 在同一個 Codex host 上共用 MCP 設定。
 - 專案專用設定可放在受信任專案的 `.codex/config.toml`。
+- Plugins 支援桌面版的 Work／Codex；Codex CLI 可輸入 `/plugins` 開啟 Plugin 瀏覽器，安裝後要開新 session 才會載入。
+- Plugins 不支援一般 Chat、IDE extension 或行動版；這些介面不要和桌面版 Work／Codex 混為一談。
 
 #### ChatGPT 網頁版
 
@@ -172,7 +174,7 @@ args = ["-y", "<MCP套件名>"]
 - JSON 不能寫註解或多餘逗號。
 - 優先使用 OAuth／Store 的安全欄位；若必須填 token，確認設定檔不會被分享或提交。
 
-### OpenCode
+### OpenCode（V1 穩定版）
 
 ```json
 {
@@ -196,6 +198,8 @@ args = ["-y", "<MCP套件名>"]
 - 用 `opencode mcp list` 檢查狀態、`opencode mcp debug <名稱>` 排錯。
 - 每個 MCP 的工具說明都會增加上下文，只啟用目前 Agent 需要的工具。
 
+> OpenCode 2.0 目前仍是 beta，執行檔為 `opencode2`，原生 MCP 設定改用 `mcp.servers`，管理指令也改成 `opencode2 mcp ...`。V2 可讀取並轉譯既有 V1 設定；不要在同一設定檔中手動混用 V1 與 V2 欄位。
+
 ---
 
 ## 常見服務快查表
@@ -205,14 +209,14 @@ args = ["-y", "<MCP套件名>"]
 | **Google Drive／Gmail／Calendar** | 官方 Plugin／Connector | 通常走 OAuth；先看實際工具是否支援所需讀寫動作。一般 API Key 不能存取使用者個資 |
 | **Google Classroom** | 官方／可信整合；必要時自建 OAuth | 寫入與學生資料權限要特別確認；學校 Workspace 管理政策可能限制授權 |
 | **Obsidian** | 本機檔案權限或可信 MCP | 不需雲端 token；把可讀寫範圍限制在指定 vault |
-| **Gemini Notebook（原 NotebookLM）** | 產品介面；必要時使用社群 `nlm` | `nlm` 不是 Google 官方 CLI，使用瀏覽器登入與既有 session，產品改版時可能失效 |
+| **Gemini Notebook（原 NotebookLM）** | 產品介面；必要時使用社群 `nlm` | `nlm` 不是 Google 官方 CLI，使用未公開的內部 API，並擷取瀏覽器 cookie／session；僅適合個人實驗，產品改版時可能失效 |
 | **GitHub** | Plugin／Connector 或 `gh` CLI | OAuth；CLI 使用 `gh auth login`，確認 repo 與寫入範圍 |
-| **Padlet** | 可信 MCP／API | API token；不要寫入 repo，先在測試看板驗證 |
+| **Padlet** | 既有看板資料與貼文優先使用官方 Public API；建板需求再評估可信第三方 MCP 或產品介面 | Public API 需要 Padlet 訂閱，使用個人帳號 Developer 頁面的 access token（介面顯示為 API key）；目前官方端點不含建立看板。Token 不要寫入 repo，先在測試看板驗證 |
 | **Firebase CLI** | 官方 CLI | `firebase login` 透過 Google 帳號授權；不是服務帳號金鑰 |
-| **Firebase Web App** | 官方 SDK／設定物件 | Web config 與 Firebase API key 是公開識別資訊；資料安全依靠 Security Rules 與 App Check |
+| **Firebase Web App** | 官方 SDK／設定物件 | Web config 與「僅限 Firebase 服務」的 Firebase API key 是公開識別資訊；資料安全依靠 Security Rules 與 App Check。Gemini Developer API key 不可公開 |
 | **Firebase Admin／伺服器** | Admin SDK／ADC／Service Account | Service Account JSON private key 是高度敏感憑證，只能放在受控環境 |
 | **Supabase** | 官方 Hosted MCP | 預設使用 OAuth，不再要求 PAT；優先指定 `project_ref`、`read_only=true`，不要連正式資料 |
-| **Notion 等 SaaS** | 官方 Remote MCP／OAuth | 優先官方整合；只有不支援 OAuth 或 CI 等特殊情境才考慮長效 token |
+| **Notion 等 SaaS** | 官方 Remote MCP／OAuth | Notion Hosted MCP 要求使用者 OAuth，不支援 bearer token；無人值守自動化應另行評估官方 REST API／Integration，不要假設 Remote MCP 可直接使用長效 token |
 
 ---
 
@@ -226,7 +230,7 @@ args = ["-y", "<MCP套件名>"]
 | JSON 設定沒有作用 | 檢查註解、多餘逗號、欄位名稱與 Windows 路徑跳脫 |
 | ChatGPT 網頁找不到本機 MCP | 網頁版不讀本機 Codex 設定；改在 Work mode 安裝 Plugin，或改用桌面版／Codex host |
 | 遠端 MCP 回傳 401／403 | 完成或重跑 OAuth；檢查 token、scope、帳號與 workspace 管理政策 |
-| `nlm` 登入失效 | 重新登入並確認社群工具版本；若產品介面已改版，回到 Gemini Notebook 官方介面 |
+| `nlm` 登入失效 | 先執行 `nlm doctor`，再重新登入並確認社群工具版本；若內部 API 或產品介面已改版，回到 Gemini Notebook 官方介面 |
 | Agent 工具太多、答非所問 | 停用不需要的 MCP／Plugin，或依專案、Agent、工具群縮小範圍 |
 
 ---
@@ -236,7 +240,7 @@ args = ["-y", "<MCP套件名>"]
 1. **最小權限**：只開需要的 scope、專案與工具；能只讀就不給寫入。
 2. **分清憑證類型**：API Key／PAT 通常是長效憑證，但權限並非一律全開；OAuth 可撤銷且能限制 scope；Service Account 是機器身分。
 3. **秘密不進 repo**：token、PAT、Service Account private key、OAuth client secret 放在環境變數、系統憑證庫或受控設定檔。
-4. **Firebase 例外要講清楚**：Firebase Web API key 可公開，但仍要限制適用 API，並正確設定 Security Rules／App Check；Service Account private key 絕不可公開。
+4. **Firebase 例外要講清楚**：僅限 Firebase 服務的 Firebase App client key 可公開，但仍要限制適用 API，並正確設定 Security Rules／App Check。`Gemini Developer API key`／`Generative Language API` 金鑰不可公開，也不可加入公開 Firebase key 的 allowlist；Service Account private key 絕不可公開。
 5. **學生資料去識別化**：只使用必要欄位；測試資料不要放真實姓名、信箱或成績。
 6. **不明 MCP 不安裝**：優先官方或可審查、持續維護的來源；外部內容仍可能造成 prompt injection。
 7. **資料庫不直接接正式環境**：優先開發專案、唯讀模式、專案限定與測試分支。
@@ -260,11 +264,16 @@ args = ["-y", "<MCP套件名>"]
 - Claude Code MCP：https://code.claude.com/docs/en/mcp
 - Google Antigravity MCP：https://antigravity.google/docs/mcp
 - OpenCode MCP：https://opencode.ai/docs/mcp-servers/
+- OpenCode 2.0 beta 遷移：https://opencode.ai/v2/docs/migrate-v1
+- Google Workspace 授權：https://developers.google.com/workspace/guides/create-credentials
+- Notion MCP：https://developers.notion.com/guides/mcp/overview
+- Padlet Public API：https://padlet.help/l/en/article/3933026qoo-public-api
+- Padlet API Reference：https://docs.padlet.dev/reference/introduction
 - Firebase API keys：https://firebase.google.com/docs/projects/api-keys
 - Firebase Admin SDK：https://firebase.google.com/docs/admin/setup
 - Firebase CLI：https://firebase.google.com/docs/cli
 - Supabase MCP：https://supabase.com/docs/guides/ai-tools/mcp
 - Gemini Notebook 更名公告：https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/
-- 社群 `nlm` 專案：https://github.com/jacob-bd/notebooklm-mcp-cli
+- 社群 `nlm` 專案：https://github.com/jacob-bd/gemini-notebook-mcp-cli
 
-> 版本：v3（2026-07-20）。已更新 ChatGPT／Codex MCP 與 Plugins 入口、Supabase OAuth、Firebase 憑證分類、Gemini Notebook 名稱、各產品重新載入方式及官方來源。
+> 版本：v4（2026-08-01）。已釐清 ChatGPT／Codex Plugin 支援介面、Codex CLI `/plugins`、OpenCode V1／V2 邊界、Padlet Public API、Firebase 與 Gemini Developer API key 的差異，以及社群 `nlm` 的新名稱與風險。

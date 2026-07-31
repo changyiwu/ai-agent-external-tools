@@ -14,8 +14,8 @@
 
 - [x] 階段一：盤點既有文件，確立三份主要交付物與專案邊界
 - [x] 階段二：專案初始化（`agents.md`＋`handoff.md`＋git＋公開 GitHub repo＋Obsidian 筆記）
-- [ ] 階段三：外部工具連接路線有變更時，同步檢查三份交付物是否一致
-- [ ] 階段四：時效性資訊定期查證，補上最後查證日期與官方來源
+- [x] 階段三：外部工具連接路線有變更時，同步檢查三份交付物是否一致
+- [x] 階段四：時效性資訊定期查證，補上最後查證日期與官方來源
 
 ## 資料夾結構
 
@@ -78,4 +78,5 @@ ai-agent-external-tools/
 
 ## 最近進度
 
+- 2026-08-01：完成時效性資料查證並同步更新三份主要交付物；釐清 OpenAI Plugins／Codex MCP 介面、OpenCode V1／V2、Padlet Public API、Firebase 與 Gemini Developer API key，以及社群 `nlm` 的名稱與安全邊界。
 - 2026-07-24：專案藍圖改用標準範本格式（補上路線圖 checklist、資料夾結構與同步層級表）；L3 路徑由不存在的「專案駕駛艙.md」更正為 `ai-agent-external-tools/專案工作流程.md`。
