@@ -59,6 +59,10 @@ ai-agent-external-tools/
 - 修改連接路線或產品入口時，同步檢查三份主要交付物是否一致
 - 不提交 `.env`、憑證、token、`.codex/`、`.claude/` 或其他代理程式本機設定
 - 本專案不使用 Firebase，也不在初始化流程中部署或修改安全規則
+- `handoff.md` **不進 git**，靠 GDrive 同步；GitHub 備份涵蓋三份主要交付物與 `agents.md`，**不涵蓋交接檔**
+- 金鑰分級：只有「僅限 Firebase 服務」的 Firebase App client key 可公開；**Gemini Developer API key 與 Service Account private key 都必須保密**。也不提交 token、PAT、OAuth secret
+- GitHub Pages **保持關閉**
+- **Padlet 官方 Public API 沒有「建立看板」端點**（只能處理既有看板的資料與貼文）；建板要用產品介面或經審查的第三方 MCP
 
 ## 外部 Padlet 模組引用規則
 
